@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.18.1/axios.js"></script>
+    <title>Perfil</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --main: #1877f2;
+            --texto: #050505;
+            --subtexto: #65676b;
+            --borde: #ced0d4;
+            --blanco: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+            color: var(--texto);
+        }
+
+        .portada {
+            height: 220px;
+            background: linear-gradient(135deg, #1877f2, #0a58ca 60%, #063e8c);
+        }
+
+        .header-perfil {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--blanco);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            padding: 0 24px 16px;
+            position: relative;
+        }
+
+        #avatar {
+            width: 168px;
+            height: 168px;
+            border-radius: 50%;
+            border: 4px solid var(--blanco);
+            position: absolute;
+            top: -84px;
+            left: 24px;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .header-info {
+            padding-top: 96px;
+            padding-bottom: 8px;
+        }
+
+        .header-info h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .subtitulo {
+            color: var(--subtexto);
+            font-size: 15px;
+            margin-top: 2px;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            margin: 16px auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 0 16px 40px;
+        }
+
+        .card {
+            background: var(--blanco);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            padding: 16px 20px;
+        }
+
+        .card h2 {
+            font-size: 17px;
+            margin: 0 0 12px;
+            border-bottom: 1px solid var(--borde);
+            padding-bottom: 8px;
+        }
+
+        .item {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            width: 200px;
+            min-width: 160px;
+            color: var(--subtexto);
+            font-weight: 600;
+        }
+
+        .val {
+            color: var(--texto);
+            word-break: break-word;
+        }
+
+        #tag {
+            display: inline-block;
+            background: #e7f3ff;
+            color: var(--main);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 24px;
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .label {
+                width: 140px;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="portada"></div>
+
+    <div class="header-perfil">
+        <img id="avatar" alt="Foto">
+        <div class="header-info">
+            <h1 id="nombre"></h1>
+            <div id="subtitulo" class="subtitulo"></div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+
+        <!-- Personal -->
+        <div class="card">
+            <h2>Información personal</h2>
+            <div class="grid">
+                <div>
+                    <div class="item"><span class="label">Título</span><span id="titulo" class="val"></span></div>
+                    <div class="item"><span class="label">Nombre</span><span id="first" class="val"></span></div>
+                    <div class="item"><span class="label">Apellido</span><span id="last" class="val"></span></div>
+                    <div class="item"><span class="label">Género</span><span id="genero" class="val"></span></div>
+                    <div class="item"><span class="label">Nacionalidad</span><span id="nat" class="val"></span></div>
+                </div>
+                <div>
+                    <div class="item"><span class="label">Fecha de nacimiento</span><span id="nacimiento"
+                            class="val"></span></div>
+                    <div class="item"><span class="label">Edad</span><span id="edad" class="val"></span></div>
+                    <div class="item"><span class="label">Registrado desde</span><span id="registro" class="val"></span>
+                    </div>
+                    <div class="item"><span class="label">ID</span><span id="doc-id" class="val"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="card">
+            <h2>Ubicación</h2>
+            <div class="grid">
+                <div>
+                    <div class="item"><span class="label">Calle</span><span id="calle" class="val"></span></div>
+                    <div class="item"><span class="label">Ciudad</span><span id="ciudad" class="val"></span></div>
+                    <div class="item"><span class="label">Estado</span><span id="estado" class="val"></span></div>
+                    <div class="item"><span class="label">País</span><span id="pais" class="val"></span></div>
+                    <div class="item"><span class="label">Código postal</span><span id="zip" class="val"></span></div>
+                </div>
+                <div>
+                    <div class="item"><span class="label">Latitud</span><span id="lat" class="val"></span></div>
+                    <div class="item"><span class="label">Longitud</span><span id="lng" class="val"></span></div>
+                    <div class="item"><span class="label">Zona horaria</span><span id="timezone" class="val"></span>
+                    </div>
+                    <div class="item"><span class="label">Descripción huso</span><span id="zona-desc"
+                            class="val"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacto -->
+        <div class="card">
+            <h2>Contacto</h2>
+            <div class="item"><span class="label">Email</span><span id="email" class="val"></span></div>
+            <div class="item"><span class="label">Teléfono fijo</span><span id="telefono" class="val"></span></div>
+            <div class="item"><span class="label">Celular</span><span id="celular" class="val"></span></div>
+        </div>
+
+        <!-- Login -->
+        <div class="card">
+            <h2>Cuenta / Login</h2>
+            <div class="item"><span class="label">UUID</span><span id="uuid" class="val"></span></div>
+            <div class="item"><span class="label">Usuario</span><span id="user" class="val"></span></div>
+            <div class="item"><span class="label">Contraseña</span><span id="pass" class="val"></span></div>
+            <div class="item"><span class="label">Salt</span><span id="salt" class="val"></span></div>
+            <div class="item"><span class="label">MD5</span><span id="md5" class="val"></span></div>
+            <div class="item"><span class="label">SHA1</span><span id="sha1" class="val"></span></div>
+            <div class="item"><span class="label">SHA256</span><span id="sha256" class="val"></span></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            let res = await axios.get("https://randomuser.me/api/");
+            let data = res.data.results[0];
+
+            // Header
+            document.getElementById("avatar").src = data.picture.large;
+            document.getElementById("nombre").innerHTML = `${data.name.title} ${data.name.first} ${data.name.last} <span id="tag">${data.nat}</span>`;
+            document.getElementById("subtitulo").textContent = `@${data.login.username} · ${data.location.city}, ${data.location.state}, ${data.location.country}`;
+
+            // Datos Personales
+            document.getElementById("titulo").textContent = data.name.title;
+            document.getElementById("first").textContent = data.name.first;
+            document.getElementById("last").textContent = data.name.last;
+            document.getElementById("genero").textContent = data.gender;
+            document.getElementById("nat").textContent = data.nat;
+            document.getElementById("nacimiento").textContent = new Date(data.dob.date).toLocaleDateString();
+            document.getElementById("edad").textContent = `${data.dob.age} años`;
+            document.getElementById("registro").textContent = `${new Date(data.registered.date).toLocaleDateString()} (hace ${data.registered.age} años)`;
+            document.getElementById("doc-id").textContent = data.id.value || "N/A";
+
+            // Ubicación
+            document.getElementById("calle").textContent = `${data.location.street.name} ${data.location.street.number}`;
+            document.getElementById("ciudad").textContent = data.location.city;
+            document.getElementById("estado").textContent = data.location.state;
+            document.getElementById("pais").textContent = data.location.country;
+            document.getElementById("zip").textContent = data.location.postcode;
+            document.getElementById("lat").textContent = data.location.coordinates.latitude;
+            document.getElementById("lng").textContent = data.location.coordinates.longitude;
+            document.getElementById("timezone").textContent = data.location.timezone.offset;
+            document.getElementById("zona-desc").textContent = data.location.timezone.description;
+
+            // Contacto
+            document.getElementById("email").textContent = data.email;
+            document.getElementById("telefono").textContent = data.phone;
+            document.getElementById("celular").textContent = data.cell;
+
+            // Login
+            document.getElementById("uuid").textContent = data.login.uuid;
+            document.getElementById("user").textContent = data.login.username;
+            document.getElementById("pass").textContent = data.login.password;
+            document.getElementById("salt").textContent = data.login.salt;
+            document.getElementById("md5").textContent = data.login.md5;
+            document.getElementById("sha1").textContent = data.login.sha1;
+            document.getElementById("sha256").textContent = data.login.sha256;
+        });
+    </script>
+
+</body>
+
+</html>
